@@ -1,6 +1,7 @@
 package principal;
 
 import java.io.BufferedReader;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +33,13 @@ public class Programa {
 				line = br.readLine();
 			}
 			
+			/* mostrar o preço médio de todos os produtos:
+			 1- pegar cada um dos preços e somar- 2- dividir pelo tamanho da lista
+			 3- tem pelo menos um elemento naõ tem divizão por zero	 */
+			
+			double avg = list.stream().map(p -> p.getPreco())
+					.reduce(0.0, (x,y) -> x+y)/ list.size();
+			System.out.println("Preço Médio: " + String.format("%.2f", avg));
 			
 		}catch (IOException e) {
 			System.out.println("Erro: " + e.getMessage());
