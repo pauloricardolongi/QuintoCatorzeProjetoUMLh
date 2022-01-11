@@ -5,9 +5,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import aplicacao.Product;
 
@@ -27,7 +29,7 @@ public class Programa {
 			String line = br.readLine();
 			while (line != null){
 				//split recortar string em dois com base na vírgula para acessar nome e preço, vai ficar no vetor fields
-				String[] fields = line.split(" , ");
+				String[] fields = line.split(",");
 				//fields na posição 0 nome; fields na posição 1 preço
 				list.add(new Product(fields[0], Double.parseDouble(fields[1])));
 				line = br.readLine();
@@ -40,6 +42,18 @@ public class Programa {
 			double avg = list.stream().map(p -> p.getPreco())
 					.reduce(0.0, (x,y) -> x+y)/ list.size();
 			System.out.println("Preço Médio: " + String.format("%.2f", avg));
+			/* mostrar os nomes dos produtos, na ordem decrescente dos produtos que possuem preços
+			 inferior ao preço médio.
+			 1-criar uma nova lista String - 2- filtrar todos que tem o preço a baixo da média 3- map para pegar
+			 o nome de cada produto 4- (sort comparator- declarar em cima) ordenar em ordem decrescente de nomes*/
+			
+			Comparator<String> comp = (s1, s2) -> s1.toUpperCase().compareTo(s2.toUpperCase());
+			
+			List<String> nomes = list.stream().filter(p -> p.getPreco() < avg)
+					.map(p -> p.getNome()).sorted(comp.reversed())
+					.collect(Collectors.toList());
+			nomes.forEach(System.out::println);
+					
 			
 		}catch (IOException e) {
 			System.out.println("Erro: " + e.getMessage());
